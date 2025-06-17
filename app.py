@@ -1,32 +1,34 @@
 import streamlit as st
 
 st.set_page_config(page_title="Forward P/E Calculator", layout="centered")
+st.title("📊 Forward P/E & Fair Value Estimator")
 
-st.title("📈 Forward P/E & Fair Value Calculator")
-
-# --- Input fields
-cmp = st.number_input("Enter CMP (₹)", min_value=1.0, value=405.0, step=1.0)
-current_eps = st.number_input("Enter Current EPS (₹)", min_value=0.0, value=17.6, step=0.1)
+# --- Inputs
+cmp = st.number_input("Current Market Price (₹)", min_value=1.0, value=405.0, step=1.0)
+current_pe = st.number_input("Current P/E", min_value=1.0, value=23.0, step=0.1)
+current_eps = st.number_input("Current EPS (₹)", min_value=0.0, value=17.6, step=0.1)
 eps_growth = st.number_input("Expected EPS Growth (%)", min_value=0.0, value=31.0, step=0.5)
 
-# --- Calculations
-fy26_eps = current_eps * (1 + eps_growth / 100)
-forward_pe = cmp / fy26_eps
+# --- Calculate on button press
+if st.button("Calculate"):
+    # EPS projection
+    fy26_eps = current_eps * (1 + eps_growth / 100)
+    
+    # Forward P/E
+    forward_pe = cmp / fy26_eps
 
-# --- Display results
-st.markdown("### 🧮 Results")
-st.write(f"**FY26 EPS (Est.)**: ₹{fy26_eps:.2f}")
-st.write(f"**Forward P/E**: {forward_pe:.2f}")
+    # Fair values at different multiples
+    target_pes = [18, 20, 22]
+    fair_values = {pe: fy26_eps * pe for pe in target_pes}
 
-# --- Fair value estimation
-st.markdown("### 🎯 Fair Value Range")
+    # --- Display
+    st.markdown("### 📈 Results")
+    st.write(f"**Projected FY26 EPS**: ₹{fy26_eps:.2f}")
+    st.write(f"**Forward P/E** (CMP ₹{cmp} / EPS ₹{fy26_eps:.2f}): **{forward_pe:.2f}**")
 
-target_pe_values = [18, 20, 22]
+    st.markdown("### 🎯 Fair Value Estimates")
+    for pe, price in fair_values.items():
+        st.write(f"🔹 At P/E {pe}: ₹{price:.2f}")
 
-for pe in target_pe_values:
-    fair_price = fy26_eps * pe
-    st.write(f"🔹 Target P/E {pe}: ₹{fair_price:.2f}")
-
-# --- Note
-st.markdown("---")
-st.info("This tool assumes 1-year forward EPS. Adjust growth % as needed for multi-year outlook.")
+    st.markdown("---")
+    st.success("Done! You can adjust inputs to explore different scenarios.")
