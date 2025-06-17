@@ -17,18 +17,30 @@ if st.button("Calculate"):
     # Forward P/E
     forward_pe = cmp / fy26_eps
 
-    # Fair values at different multiples
+    # Fair values
     target_pes = [18, 20, 22]
     fair_values = {pe: fy26_eps * pe for pe in target_pes}
+
+    # --- Verdict logic
+    pe_diff = forward_pe - current_pe
+    verdict = ""
+    if abs(pe_diff) / current_pe <= 0.05:
+        verdict = "⚖️ Fairly Priced"
+    elif forward_pe < current_pe:
+        verdict = "✅ Undervalued"
+    else:
+        verdict = "❌ Overvalued"
 
     # --- Display
     st.markdown("### 📈 Results")
     st.write(f"**Projected FY26 EPS**: ₹{fy26_eps:.2f}")
-    st.write(f"**Forward P/E** (CMP ₹{cmp} / EPS ₹{fy26_eps:.2f}): **{forward_pe:.2f}**")
+    st.write(f"**Forward P/E**: {forward_pe:.2f}")
+    st.write(f"**Current P/E**: {current_pe:.2f}")
+    st.markdown(f"### 🧐 Verdict: **{verdict}**")
 
     st.markdown("### 🎯 Fair Value Estimates")
     for pe, price in fair_values.items():
         st.write(f"🔹 At P/E {pe}: ₹{price:.2f}")
 
     st.markdown("---")
-    st.success("Done! You can adjust inputs to explore different scenarios.")
+    st.info("Verdict is based on Forward P/E vs Current P/E.")
