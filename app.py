@@ -42,8 +42,10 @@ if st.button("Calculate"):
     for pe, price in fair_values.items():
         st.write(f"🔹 At P/E {pe}: ₹{price:.2f}")
 
+    st.info("Verdict is based on Forward P/E vs Current P/E.")
+
     st.markdown("---")
     st.info("FOLLOW MY TWITTER ACCOUNT")
     st.write("https://x.com/Ganesh_1609",unsafe_allow_html=True)
-    st.info("Verdict is based on Forward P/E vs Current P/E.")
+  
 
