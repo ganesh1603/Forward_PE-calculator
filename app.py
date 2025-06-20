@@ -16,10 +16,6 @@ if linkedin_id or twitter_id or github_id:
     st.sidebar.markdown("### 🌐 Your Links")
     if linkedin_id:
         st.sidebar.markdown(f"[LinkedIn](https://{linkedin_id})")
-    if twitter_id:
-        st.sidebar.markdown(f"[Twitter](https://{twitter_id})")
-    if github_id:
-        st.sidebar.markdown(f"[GitHub](https://{github_id})")
 
 # --- Inputs
 cmp = st.number_input("Current Market Price (₹)", min_value=1.0, value=405.0, step=1.0)
